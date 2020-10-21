@@ -29,9 +29,16 @@ export default new Vuex.Store({
 
         commit('setToken', response.authenticationToken)
 
+        localStorage.setItem('authenticationToken', response.authenticationToken)
+
       } catch (error) {
         
       }
+    },
+    readToken({commit}) {
+      if(localStorage.getItem('authenticationToken')){
+        commit('setToken', localStorage.getItem('authenticationToken'))
+      } 
     }
   },
   modules: {
