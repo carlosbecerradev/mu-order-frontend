@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 export default {
   name: 'Login',
   data(){
@@ -31,6 +33,9 @@ export default {
         password: ''
       }
     }
+  },
+  methods: {
+    ...mapActions(["login"])
   }
 }
 </script>
