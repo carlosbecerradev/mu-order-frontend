@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '../router/index.js'
 
 Vue.use(Vuex)
 
@@ -14,9 +15,8 @@ export default new Vuex.Store({
   },
   actions: {
     async login({commit}, usuario){
-      console.log(usuario);
       try {
-        const request = await fetch('http://localhost:8090/api/auth/login', {
+        const response = await fetch('http://localhost:8090/api/auth/login', {
           method: 'POST',
           headers: {
             'content-type': 'application/json'
@@ -24,15 +24,16 @@ export default new Vuex.Store({
           body: JSON.stringify(usuario)
         });
 
-        const response = await request.json()
-        console.log(response.authenticationToken)
+        const responseBody = await response.json();
 
-        commit('setToken', response.authenticationToken)
+        commit('setToken', responseBody.authenticationToken);
+        localStorage.setItem('authenticationToken', responseBody.authenticationToken);
 
-        localStorage.setItem('authenticationToken', response.authenticationToken)
-
+        if(response.status == 200){
+          router.push('orders')
+        }
       } catch (error) {
-        
+        console.error(error);
       }
     },
     readToken({commit}) {
