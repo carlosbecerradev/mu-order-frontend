@@ -1,11 +1,25 @@
 <template>
-  <h1>Pedidos</h1>
+  <div class="">
+    <h1>Pedidos</h1>
+    <ul>
+      <li v-for="(order, index) of orders" :key="index">
+        {{index}} - {{order.id}} - {{order.itemName}} -
+        {{order.itemLevel}} - {{order.itemOption}} - {{order.itemType}}
+        {{order.nickname}} - {{order.observation}}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 
 export default {
+  data() {
+    return {
+      orders: {},
+    }
+  },
   computed: {
     ...mapState(["token"]),
   },
@@ -20,7 +34,7 @@ export default {
         });
 
         const responseBody = await response.json();
-        console.log(responseBody);
+        this.orders = responseBody;
       } catch (error) {
         console.error(error);
       }
