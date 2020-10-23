@@ -40,6 +40,10 @@ export default new Vuex.Store({
       if(localStorage.getItem('authenticationToken')){
         commit('setToken', localStorage.getItem('authenticationToken'))
       } 
+    },
+    logout({commit}){
+      localStorage.removeItem('authenticationToken');
+      commit('setToken', null)
     }
   },
   modules: {
