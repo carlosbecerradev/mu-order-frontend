@@ -214,11 +214,19 @@ export default {
   width: 100%;
   padding-left: 0;
   margin: 0;
+  list-style: none;
+  border: 1px solid #42b983;
+  text-align: left;
 }
 .autocomplete-itemname-list li {
-  border: 1px solid red;
   border-bottom: none;
+  font-size: 14px;
+  padding: 4px 6px;
   cursor: pointer;
+}
+.autocomplete-itemname-list li:hover {
+  background-color: #42b983;
+  color: #fff;
 }
 .autocomplete-itemname-input-block {
   display: flex;
@@ -234,8 +242,10 @@ export default {
   cursor: pointer;
 }
 .autocompleteClose {
-  border: 1px solid #42b983;
+  background-color: #42b983;
+  color: #fff;
   cursor: pointer;
+  text-align: center;
 }
 /*  */
 .select-itemcategorie {
