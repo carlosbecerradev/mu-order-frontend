@@ -46,12 +46,12 @@
       <div class="select-itemcategorie">
         <label  style="display: block; width:100%; text-align: left;" for="">Por categoría</label>
         <select 
-          v-model="itemCategorieSelected"
-          @change="getOrdersByItemCategorie(itemCategorieSelected)"
+          v-model="filterByItemCategorie.itemCategorieSelected"
+          @change="getOrdersByItemCategorie()"
           >
           <option @click="getOrders()" value="0">Todas</option>
           <option
-            v-for="(itemCategorie, index) of itemCategories"
+            v-for="(itemCategorie, index) of filterByItemCategorie.itemCategories"
             :key="index"
             :value="itemCategorie.name"
           >
@@ -73,9 +73,11 @@ export default {
         itemNameParameter: "",
         flagAutocompleteItemList: false,
         autocompleteItemList: [],
+      },
+      filterByItemCategorie: {
+        itemCategories: [],
+        itemCategorieSelected: '',
       },      
-      itemCategories: [],
-      itemCategorieSelected: '',
     };
   },
   computed: {
@@ -155,20 +157,18 @@ export default {
             },
           }
         );
-        console.log("response", response);
         if (response.status == 200) {
           const responseBody = await response.json();
-          console.log("responseBody", responseBody);
-          this.itemCategories = responseBody;
+          this.filterByItemCategorie.itemCategories = responseBody;
         }
       } catch (error) {
         console.error(error);
       }
     },
-    async getOrdersByItemCategorie(itemCategorieSelected) {
+    async getOrdersByItemCategorie() {
       try {
         const response = await fetch(
-          `http://localhost:8090/api/order/by-item-category/${itemCategorieSelected}`,
+          `http://localhost:8090/api/order/by-item-category/${this.filterByItemCategorie.itemCategorieSelected}`,
           {
             method: "GET",
             headers: {
