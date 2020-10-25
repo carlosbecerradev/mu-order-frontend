@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    <OrdersFilter />
     <h1>Pedidos</h1>
     <ul>
       <li v-for="(order, index) of orders" :key="index">
@@ -12,18 +13,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import OrdersFilter from '@/components/OrdersFilter.vue'
+import { mapState, mapMutations } from "vuex";
 
 export default {
   data() {
     return {
-      orders: {},
     }
   },
   computed: {
-    ...mapState(["token"]),
+    ...mapState(["token", "orders"]),
   },
   methods: {
+    ...mapMutations(['setOrders']),
     async getOrders() {
       try {
         const response = await fetch("http://localhost:8090/api/order", {
@@ -34,11 +36,14 @@ export default {
         });
 
         const responseBody = await response.json();
-        this.orders = responseBody;
+        this.setOrders(responseBody)
       } catch (error) {
         console.error(error);
       }
     },
+  },
+  components: {
+    OrdersFilter
   },
   created() {
     this.getOrders();
