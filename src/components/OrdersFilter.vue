@@ -8,16 +8,16 @@
           <div class="autocomplete-itemname-input-block">
             <input
               type="text"
-              v-model="itemNameParam"
+              v-model="filterByItem.itemNameParameter"
               autocomplete="off"
               class="autocomplete-itemname-input"
-              @input="getItemsByName(itemNameParam)"
-              @focus="autocompleteList = true"
+              @input="getItemsByName(filterByItem.itemNameParameter)"
+              @focus="filterByItem.flagAutocompleteItemList = true"
               placeholder="Nombre"
             />
             <div
               class="autocomplete-itemname-input-search-icon"
-              @click="getOrdersByItemName(itemNameParam)"
+              @click="getOrdersByItemName(filterByItem.itemNameParameter)"
             >
               send
             </div>
@@ -25,18 +25,18 @@
         </div>
 
         <div
-          v-if="autocompleteItemsName && autocompleteList"
+          v-if="filterByItem.autocompleteItemList && filterByItem.flagAutocompleteItemList"
           class="autocomplete-itemname-list"
         >
           <ul>
             <li
-              v-for="(item, index) of autocompleteItemsName"
+              v-for="(item, index) of filterByItem.autocompleteItemList"
               :key="index"
               @click="setItem(item)"
             >
-              {{ index }} - {{ item.item_id }} - {{ item.name }}
+              {{ item.name }}
             </li>
-            <div class="autocompleteClose" @click="autocompleteList = false">
+            <div class="autocompleteClose" @click="filterByItem.flagAutocompleteItemList = false">
               cerrar
             </div>
           </ul>
@@ -69,9 +69,11 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      itemNameParam: "",
-      autocompleteList: false,
-      autocompleteItemsName: [],
+      filterByItem: {
+        itemNameParameter: "",
+        flagAutocompleteItemList: false,
+        autocompleteItemList: [],
+      },      
       itemCategories: [],
       itemCategorieSelected: '',
     };
@@ -96,11 +98,11 @@ export default {
         console.error(error);
       }
     },
-    async getItemsByName(itemNameParam) {
-      if (this.itemNameParam.trim() !== "") {
+    async getItemsByName(itemNameParameter) {
+      if (this.filterByItem.itemNameParameter.trim() !== "") {
         try {
           const response = await fetch(
-            `http://localhost:8090/api/item/${itemNameParam}`,
+            `http://localhost:8090/api/item/${itemNameParameter}`,
             {
               method: "GET",
               headers: {
@@ -109,10 +111,8 @@ export default {
             }
           );
           if (response.status == 200) {
-            console.log("response", response);
             const responseBody = await response.json();
-            console.log("responseBody", responseBody);
-            this.autocompleteItemsName = responseBody;
+            this.filterByItem.autocompleteItemList = responseBody;
           }
         } catch (error) {
           console.error(error);
@@ -120,26 +120,28 @@ export default {
       }
     },
     setItem(item) {
-      this.itemNameParam = item.name;
-      this.autocompleteItemsName = [];
-      this.autocompleteList = false;
+      this.filterByItem.itemNameParameter = item.name;
+      this.filterByItem.autocompleteItemList = [];
+      this.filterByItem.flagAutocompleteItemList = false;
     },
-    async getOrdersByItemName(itemNameParam) {
-      try {
-        const response = await fetch(
-          `http://localhost:8090/api/order/by-item/${itemNameParam}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: "Bearer " + this.token,
-            },
-          }
-        );
+    async getOrdersByItemName(itemNameParameter) {
+      if (this.filterByItem.itemNameParameter.trim() !== "") {
+        try {
+          const response = await fetch(
+            `http://localhost:8090/api/order/by-item/${itemNameParameter}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: "Bearer " + this.token,
+              },
+            }
+          );
 
-        const responseBody = await response.json();
-        this.setOrders(responseBody)
-      } catch (error) {
-        console.error(error);
+          const responseBody = await response.json();
+          this.setOrders(responseBody)
+        } catch (error) {
+          console.error(error);
+        }
       }
     },
     async getItemCategories() {
