@@ -6,11 +6,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: null
+    token: null,
+    orders: [],
   },
   mutations: {
     setToken(state, payload) {
       state.token = payload;
+    },
+    setOrders(state, orders){
+      state.orders = orders;
     }
   },
   actions: {
