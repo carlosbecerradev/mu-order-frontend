@@ -1,56 +1,64 @@
 <template>
-  <div class="filters">
-    <div class="autocomplete-itemname">
-      <div class="autocomplete-itemname-input-block">
-        <input
-          type="text"
-          v-model="itemNameParam"
-          autocomplete="off"
-          class="autocomplete-itemname-input"
-          @input="getItemsByName(itemNameParam)"
-          @focus="autocompleteList = true"
-        />
+  <div class="filter">
+    <p style="font-weight: bold; margin-top: 0;">Filtrar</p>
+    <div class="filter-items">
+      <div class="autocomplete-itemname">        
+        <div>
+          <label  style="display: block; width:100%; text-align: left;" for="">Por item</label>
+          <div class="autocomplete-itemname-input-block">
+            <input
+              type="text"
+              v-model="itemNameParam"
+              autocomplete="off"
+              class="autocomplete-itemname-input"
+              @input="getItemsByName(itemNameParam)"
+              @focus="autocompleteList = true"
+              placeholder="Nombre"
+            />
+            <div
+              class="autocomplete-itemname-input-search-icon"
+              @click="getOrdersByItemName(itemNameParam)"
+            >
+              send
+            </div>
+          </div>
+        </div>
+
         <div
-          class="autocomplete-itemname-input-search-icon"
-          @click="getOrdersByItemName(itemNameParam)"
+          v-if="autocompleteItemsName && autocompleteList"
+          class="autocomplete-itemname-list"
         >
-          send
+          <ul>
+            <li
+              v-for="(item, index) of autocompleteItemsName"
+              :key="index"
+              @click="setItem(item)"
+            >
+              {{ index }} - {{ item.item_id }} - {{ item.name }}
+            </li>
+            <div class="autocompleteClose" @click="autocompleteList = false">
+              cerrar
+            </div>
+          </ul>
         </div>
       </div>
-
-      <div
-        v-if="autocompleteItemsName && autocompleteList"
-        class="autocomplete-itemname-list"
-      >
-        <ul>
-          <li
-            v-for="(item, index) of autocompleteItemsName"
-            :key="index"
-            @click="setItem(item)"
+      <!-- combobox -->
+      <div class="select-itemcategorie">
+        <label  style="display: block; width:100%; text-align: left;" for="">Por categoría</label>
+        <select 
+          v-model="itemCategorieSelected"
+          @change="getOrdersByItemCategorie(itemCategorieSelected)"
           >
-            {{ index }} - {{ item.item_id }} - {{ item.name }}
-          </li>
-          <div class="autocompleteClose" @click="autocompleteList = false">
-            close
-          </div>
-        </ul>
+          <option @click="getOrders()" value="0">Todas</option>
+          <option
+            v-for="(itemCategorie, index) of itemCategories"
+            :key="index"
+            :value="itemCategorie.name"
+          >
+            {{ itemCategorie.name }}
+          </option>
+        </select>
       </div>
-    </div>
-    <!-- combobox -->
-    <div class="select-itemcategorie">
-      <select 
-        v-model="itemCategorieSelected"
-        @change="getOrdersByItemCategorie(itemCategorieSelected)"
-        >
-        <option @click="getOrders()" value="0">Any</option>
-        <option
-          v-for="(itemCategorie, index) of itemCategories"
-          :key="index"
-          :value="itemCategorie.name"
-        >
-          {{ itemCategorie.name }}
-        </option>
-      </select>
     </div>
   </div>
 </template>
@@ -183,7 +191,11 @@ export default {
 };
 </script>
 <style>
-.filters {
+.filter {
+  padding: 1.5rem 1rem;
+  border: 1px solid #42b983;
+}
+.filter-items {
     display: flex;
     justify-content: center;
 }
@@ -192,7 +204,7 @@ export default {
 }
 .autocomplete-itemname-list {
   position: absolute;
-  top: 26px;
+  top: calc(100% + 2px);
   width: 100%;
   background-color: white;
 }
@@ -213,12 +225,14 @@ export default {
   width: 100%;
 }
 .autocomplete-itemname-input-search-icon {
-  padding: 4px 2px;
-  border: 1px solid black;
+  padding: 2px 4px;
+    height: 24px;
+  background-color: #42b983;
+  color: #fff;
   cursor: pointer;
 }
 .autocompleteClose {
-  border: 1px solid blue;
+  border: 1px solid #42b983;
   cursor: pointer;
 }
 /*  */
@@ -228,6 +242,9 @@ export default {
 }
 .select-itemcategorie select {
     width: 100%;
-    height: 100%;
+    height: 24px;
+}
+label {
+  font-size: 14px;
 }
 </style>
