@@ -10,18 +10,19 @@
           <div class="item">
             <div class="item-name">{{order.itemName}}<span class="item-level">+ {{order.itemLevel}}</span></div>
             <div class="item-details">
-              <span class="item-type">{{order.itemType}}</span> | 
+              <span class="item-type">{{order.itemType}}</span> 
+              <span v-if="order.itemType != null && order.itemOption != null" style="margin: 0 6px"> | </span> 
               <span class="item-option">{{order.itemOption}}</span>
             </div>
           </div>          
         </div>
         <div class="order-body">
-          <strong class="">Observación:</strong>
+          <div class="">Observación:</div>
           <div class="observation">{{order.observation}}</div>
         </div>
         <div class="order-footer">
           <div class="user">By {{order.nickname}}</div>
-          <div class="timeago">hace 1 h</div>
+          <div class="timeago">{{order.createdAt}}</div>
         </div>
       </div>
     </div>
@@ -62,11 +63,12 @@ export default {
   .order {
     border: 1px solid  #42b983;
     text-align: left;
+    font-weight: bold;
+    font-size: 14px;
   }
   .order-header {    
     padding: .5rem 1rem;
     border-bottom: 1px solid  #42b983;
-    font-weight: bold;
   }
   .order-body {
     padding: .5rem 1rem;
@@ -79,6 +81,5 @@ export default {
     justify-content: space-between;
     border-top: 1px solid  #42b983;
     padding: .5rem 1rem;
-    font-weight: bold;
   }
 </style>
