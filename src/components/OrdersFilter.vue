@@ -58,6 +58,9 @@
           </option>
         </select>
       </div>
+      <div class="clean-filters">
+        <div @click="cleanFilters()" class="clean-filters-btn">Limpiar filtros</div>
+      </div>
     </div>
   </div>
 </template>
@@ -185,6 +188,11 @@ export default {
         console.error(error);
       }
     },
+    cleanFilters() {
+      this.filterByItem.itemNameParameter = "";
+      this.filterByItemCategorie.itemCategorieSelected = "";
+      this.getOrders();
+    }
   },
   created() {
     this.getItemCategories();
@@ -255,6 +263,22 @@ export default {
     width: 100%;
     height: 24px;
 }
+/*  */
+.clean-filters {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.clean-filters-btn {
+ border: 1px solid #42b983;
+ color: #42b983;
+ font-size: 14px;
+ height: 24px;
+ padding: 2px 6px;
+ cursor: pointer;
+}
+/*  */
 label {
   font-size: 14px;
 }
