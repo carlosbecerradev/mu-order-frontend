@@ -48,7 +48,24 @@ export default new Vuex.Store({
     logout({commit}){
       localStorage.removeItem('authenticationToken');
       commit('setToken', null)
-    }
+    },
+    async getOrders({commit, state}) {
+      try {
+        const response = await fetch("http://localhost:8090/api/order", {
+          method: "GET",
+          headers: {
+            'Authorization': "Bearer " + state.token,
+          },
+        });
+        
+        if(response.status == 200){
+          const responseBody = await response.json();
+          commit('setOrders', responseBody);
+        }        
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   modules: {
   }

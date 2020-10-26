@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   data() {
@@ -87,21 +87,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setOrders']),
-    async getOrders() {
-      try {
-        const response = await fetch("http://localhost:8090/api/order", {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer " + this.token,
-          },
-        });
-
-        const responseBody = await response.json();
-        this.setOrders(responseBody)
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    ...mapActions(['getOrders']),
     async getItemsByName(itemNameParameter) {
       if (this.filterByItem.itemNameParameter.trim() !== "") {
         try {
