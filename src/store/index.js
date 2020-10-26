@@ -48,6 +48,7 @@ export default new Vuex.Store({
     logout({commit}){
       localStorage.removeItem('authenticationToken');
       commit('setToken', null)
+      router.push('/')
     },
     async getOrders({commit, state}) {
       try {
@@ -57,7 +58,7 @@ export default new Vuex.Store({
             'Authorization': "Bearer " + state.token,
           },
         });
-        
+
         if(response.status == 200){
           const responseBody = await response.json();
           commit('setOrders', responseBody);
