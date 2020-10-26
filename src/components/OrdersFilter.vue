@@ -49,7 +49,6 @@
           v-model="filterByItemCategorie.itemCategorieSelected"
           @change="getOrdersByItemCategorie()"
           >
-          <option @click="getOrders()" value="0">Todas</option>
           <option
             v-for="(itemCategorie, index) of filterByItemCategorie.itemCategories"
             :key="index"
