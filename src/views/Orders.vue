@@ -5,7 +5,8 @@
     <p style="text-align:left; font-weight: bold">Resultados</p>
     
     <div class="orders">
-      <div class="order" v-for="(order, index) of orders" :key="index">
+      <div v-if="orders.length === 0" style="text-align: left">No hay resultados</div>
+      <div v-else class="order" v-for="(order, index) of orders" :key="index">
         <div class="order-header">
           <div class="item">
             <div class="item-name">{{order.itemName}}<span class="item-level">+ {{order.itemLevel}}</span></div>
