@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router/index.js'
 
+import useTimeAgo from '../hooks/useTimeAgo'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -58,36 +60,6 @@ export default new Vuex.Store({
             'Authorization': "Bearer " + state.token,
           },
         });
-
-        const DATE_UNITS = [
-          ["day", 86400],
-          ["hour", 3600],
-          ["minute", 60],
-          ["second", 1],
-        ];
-
-        const getDateDiffs = (timestamp) => {
-          const now = Math.floor(Date.now() / 1000);
-          const elapsed = (timestamp - now);
-
-          for(const [unit, secondsInUnit] of DATE_UNITS){
-            if(Math.abs(elapsed) > secondsInUnit || unit === "second"){
-              const value = Math.round(elapsed / secondsInUnit); 
-              return {value, unit};
-            }
-          }
-        };
-
-        const useTimeAgo = (createdAt) => {
-          if(createdAt == null){
-            return ""
-          }         
-
-          const {value, unit} = getDateDiffs(createdAt);
-          const rtf = new Intl.RelativeTimeFormat('es', {
-            style: "short" });
-          return rtf.format(value, unit);
-        };
 
         if(response.status == 200){
           const responseBody = await response.json();
