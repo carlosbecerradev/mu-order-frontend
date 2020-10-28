@@ -27,7 +27,13 @@ const routes = [
     name: 'Orders',
     component: () => import(/* webpackChunkName: "Orders" */ '../views/Orders.vue'),
     meta: {protectedRoute: true}
-  }
+  },
+  {
+    path: '/my-orders',
+    name: 'MyOrders',
+    component: () => import(/* webpackChunkName: "MyOrders" */ '../views/MyOrders.vue'),
+    meta: {protectedRoute: true}
+  },
 ]
 
 const router = new VueRouter({
