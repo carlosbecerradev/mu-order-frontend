@@ -38,7 +38,7 @@ const routes = [
     path: '/create/order',
     name: 'CreateOrder',
     component: () => import(/* webpackChunkName: "NewOrder" */ '../views/CreateOrder.vue'),
-    // meta: {protectedRoute: true}
+    meta: {protectedRoute: true}
   },
 ]
 
