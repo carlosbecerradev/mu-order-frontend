@@ -28,6 +28,9 @@
           <div class="user">By {{order.nickname}}</div>
           <div class="timeago">{{order.createdAt}}</div>
         </div>
+        <div class="order-actions">
+          <router-link :to="{path: `/edit/order/${order.id}`}">editar</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -82,6 +85,10 @@ export default {
   .order-footer {
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid  #42b983;
+    padding: .5rem 1rem;
+  }
+  .order-actions {
     border-top: 1px solid  #42b983;
     padding: .5rem 1rem;
   }
