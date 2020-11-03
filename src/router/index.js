@@ -50,11 +50,26 @@ const router = new VueRouter({
 
 router.beforeEach( (to, from, next)=>{
   const isProtectedRoute = to.matched.some( route => route.meta.protectedRoute)
-  if(isProtectedRoute && store.state.token === null){
+
+  if(isProtectedRoute &&  isInvalidToken(store.state.token)){
     next({path:'/login'})
   } else {
     next()
   }
 })
+
+/**
+ * If the result is positive, then the token has already expired
+ * @param {JWT} token
+ */
+const isInvalidToken = (token)=>{
+  try {
+    const getJwtExpiredDate = JSON.parse(atob(token.split('.')[1])).exp
+    const getCurrentTimestampInMillis = Math.floor(Date.now() / 1000);
+    return getCurrentTimestampInMillis - getJwtExpiredDate >= 0 ? true : false;
+  } catch (error) {
+    return true
+  }
+};
 
 export default router
