@@ -1,9 +1,12 @@
 <template>
   <div class="">
     <h1>Mis Pedidos</h1>
+    <div style="margin-bottom: 1rem; text-align: left;">
+      <router-link to="/create/order">Nuevo pedido</router-link>
+    </div>
     <MyOrdersFilter />
     <p style="text-align:left; font-weight: bold">Resultados</p>
-    
+
     <div class="orders">
       <div v-if="myOrders.length === 0" style="text-align: left">No hay resultados</div>
       <div v-else class="order" v-for="(order, index) of myOrders" :key="index">
@@ -11,11 +14,11 @@
           <div class="item">
             <div class="item-name">{{order.itemName}}<span class="item-level">+ {{order.itemLevel}}</span></div>
             <div class="item-details">
-              <span class="item-type">{{order.itemType}}</span> 
-              <span v-if="order.itemType != null && order.itemOption != null" style="margin: 0 6px"> | </span> 
+              <span class="item-type">{{order.itemType}}</span>
+              <span v-if="order.itemType != null && order.itemOption != null" style="margin: 0 6px"> | </span>
               <span class="item-option">{{order.itemOption}}</span>
             </div>
-          </div>          
+          </div>
         </div>
         <div class="order-body">
           <div class="">Observación:</div>
@@ -66,7 +69,7 @@ export default {
     font-weight: bold;
     font-size: 14px;
   }
-  .order-header {    
+  .order-header {
     padding: .5rem 1rem;
     border-bottom: 1px solid  #42b983;
   }
