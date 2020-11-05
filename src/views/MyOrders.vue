@@ -29,7 +29,8 @@
           <div class="timeago">{{order.createdAt}}</div>
         </div>
         <div class="order-actions">
-          <router-link :to="{path: `/edit/order/${order.id}`}">editar</router-link>
+          <router-link :to="{path: `/edit/order/${order.id}`}">editar</router-link> |
+          <a href="#" @click="deleteOrder(order)">eliminar</a>
         </div>
       </div>
     </div>
@@ -46,10 +47,28 @@ export default {
     }
   },
   computed: {
-    ...mapState(["myOrders"]),
+    ...mapState(["myOrders", "token"]),
   },
   methods: {
     ...mapActions(['getMyOrders']),
+    async deleteOrder(order){
+      if(confirm(`${order.nickname}, ¿Estás seguro de eliminar este pedido?`)){
+        try {
+          const response = await fetch(`http://localhost:8090/api/order/${order.id}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization : "Bearer " + this.token,
+            },
+          });
+          if(response.status == 200){
+            console.log("Order was deleted");
+    this.getMyOrders();
+          }
+        } catch (error) {
+         console.log(error);
+        }
+      }
+    }
   },
   components: {
     MyOrdersFilter
