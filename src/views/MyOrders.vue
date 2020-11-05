@@ -12,7 +12,7 @@
       <div v-else class="order" v-for="(order, index) of myOrders" :key="index">
         <div class="order-header">
           <div class="item">
-            <div class="item-name">{{order.itemName}}<span class="item-level">+ {{order.itemLevel}}</span></div>
+            <div class="item-name">{{order.item.name}}<span class="item-level">+ {{order.itemLevel}}</span></div>
             <div class="item-details">
               <span class="item-type">{{order.itemType}}</span>
               <span v-if="order.itemType != null && order.itemOption != null" style="margin: 0 6px"> | </span>

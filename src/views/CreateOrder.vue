@@ -149,8 +149,8 @@ export default {
       this.filterByItem.itemNameParameter = item.name;
       this.filterByItem.autocompleteItemList = [];
       this.filterByItem.flagAutocompleteItemList = false;
-      this.orderRequest.itemId = item.item_id;
-      this.getItemOptionsAndTypes(item.item_id);
+      this.orderRequest.itemId = item.id;
+      this.getItemOptionsAndTypes(item.id);
     },
     async getItemOptionsAndTypes(itemId) {
       try {
