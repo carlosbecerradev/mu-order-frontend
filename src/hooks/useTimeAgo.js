@@ -5,22 +5,23 @@ const DATE_UNITS = [
   ["second", 1],
 ];
 
-const getDateDiffs = (timestamp) => {
-  const now = Math.floor(Date.now() / 1000);
-  const elapsed = (timestamp - now);
+const getDateDiffs = (TimeInMilliseconds) => {
+  const now = Date.now();
+  const elapsed = (TimeInMilliseconds - now) / 1000;
   for(const [unit, secondsInUnit] of DATE_UNITS){
     if(Math.abs(elapsed) > secondsInUnit || unit === "second"){
-      const value = Math.round(elapsed / secondsInUnit); 
+      const value = Math.round(elapsed / secondsInUnit);
       return {value, unit};
     }
   }
 };
 
-export default function useTimeAgo(timestampInSeconds) {
-    if(timestampInSeconds == null){
+export default function useTimeAgo(dateTime) {
+    if(dateTime == null){
       return ""
-    }         
-    const {value, unit} = getDateDiffs(timestampInSeconds);
+    }
+    const convertDateTimeToMilliseconds = (new Date(dateTime)).getTime();
+    const {value, unit} = getDateDiffs(convertDateTimeToMilliseconds);
     const rtf = new Intl.RelativeTimeFormat('es', {
       style: "short" });
     return rtf.format(value, unit);
