@@ -29,6 +29,7 @@
           <div class="timeago">{{order.createdAt}}</div>
         </div>
         <div class="order-actions">
+          <router-link :to="{path: `/create/order-history/${order.id}`}">Conseguido</router-link> |
           <router-link :to="{path: `/edit/order/${order.id}`}">editar</router-link> |
           <a href="#" @click="deleteOrder(order)">eliminar</a>
         </div>
