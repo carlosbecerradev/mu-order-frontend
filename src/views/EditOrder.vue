@@ -94,6 +94,7 @@
         ></textarea>
       </div>
       <button>Confirmar</button>
+      <router-link to="../../my-orders">Cancelar</router-link>
     </form>
   </div>
 </template>
@@ -146,14 +147,13 @@ export default {
         }
       }
     },
-    setItem(item) {
+    async setItem(item) {
       this.filterByItem.itemNameParameter = item.name;
       this.filterByItem.autocompleteItemList = [];
       this.filterByItem.flagAutocompleteItemList = false;
       this.orderRequest.itemId = item.id;
-      this.getItemOptionsAndTypes(item.id);
-      this.orderRequest.itemOption = null;
-      this.orderRequest.itemType = null;
+      await this.getItemOptionsAndTypes(item.id);
+      await this.validateOptionsAndTypes();
     },
     async getItemOptionsAndTypes(itemId) {
       try {
@@ -173,6 +173,27 @@ export default {
         }
       } catch (error) {
         console.error(error);
+      }
+    },
+    validateOptionsAndTypes() {
+      let flagItemType = false, flagItemOption = false;
+      for(let i= 0; i < this.itemTypes.length; i++){
+        if(this.itemTypes[i].name == this.orderRequest.itemType){
+          flagItemType = true;
+          break;
+        }
+      }
+      if(flagItemType === false){
+        this.orderRequest.itemType = null;
+      }
+      for(let i= 0; i < this.itemOptions.length; i++){
+        if(this.itemOptions[i].name == this.orderRequest.itemOption){
+          flagItemOption = true;
+          break;
+        }
+      }
+      if(flagItemOption === false){
+        this.orderRequest.itemOption = null;
       }
     },
     async getOrderById(id) {
