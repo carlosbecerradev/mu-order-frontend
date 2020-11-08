@@ -52,6 +52,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "CreateOrderHistory" */ '../views/CreateOrderHistory.vue'),
     meta: {protectedRoute: true}
   },
+  {
+    path: '/order-history',
+    name: 'MyOrderHistory',
+    component: () => import(/* webpackChunkName: "MyOrderHistory" */ '../views/MyOrderHistory.vue'),
+    meta: {protectedRoute: true}
+  },
 ]
 
 const router = new VueRouter({

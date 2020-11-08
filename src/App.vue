@@ -5,6 +5,7 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/orders">Orders</router-link> |
       <router-link to="/my-orders">MyOrders</router-link> |
+      <router-link to="/order-history">MyOrderHistory</router-link> |
       <router-link to="/login">Login</router-link> |
       <button @click="logout">Logout</button>
     </div>
