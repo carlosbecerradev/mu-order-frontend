@@ -94,6 +94,7 @@
         ></textarea>
       </div>
       <button>Confirmar</button>
+      <router-link to="../../my-orders">Cancelar</router-link>
     </form>
   </div>
 </template>
