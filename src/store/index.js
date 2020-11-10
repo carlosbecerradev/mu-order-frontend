@@ -11,6 +11,7 @@ export default new Vuex.Store({
     token: null,
     orders: [],
     myOrders: [],
+    myOrderHistory: [],
   },
   mutations: {
     setToken(state, payload) {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
     },
     setMyOrders(state, myOrders){
       state.myOrders = myOrders;
+    },
+    setMyOrderHistory(state, myOrderHistory){
+      state.myOrderHistory = myOrderHistory;
     },
   },
   actions: {
@@ -49,7 +53,7 @@ export default new Vuex.Store({
     readToken({commit}) {
       if(localStorage.getItem('authenticationToken')){
         commit('setToken', localStorage.getItem('authenticationToken'))
-      } 
+      }
     },
     logout({commit}){
       localStorage.removeItem('authenticationToken');
@@ -67,11 +71,11 @@ export default new Vuex.Store({
 
         if(response.status == 200){
           const responseBody = await response.json();
-          for(let order of responseBody){            
-            order.createdAt = useTimeAgo(order.createdAt); 
+          for(let order of responseBody){
+            order.createdAt = useTimeAgo(order.createdAt);
           }
           commit('setOrders', responseBody);
-        }        
+        }
       } catch (error) {
         console.error(error);
       }
@@ -87,11 +91,32 @@ export default new Vuex.Store({
 
         if(response.status == 200){
           const responseBody = await response.json();
-          for(let order of responseBody){            
-            order.createdAt = useTimeAgo(order.createdAt); 
+          for(let order of responseBody){
+            order.createdAt = useTimeAgo(order.createdAt);
           }
           commit('setMyOrders', responseBody);
-        }        
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getMyOrderHistory({commit, state}) {
+      try {
+        const response = await fetch("http://localhost:8090/api/order-history", {
+          method: "GET",
+          headers: {
+            'Authorization': "Bearer " + state.token,
+          },
+        });
+
+        if(response.status == 200){
+          const responseBody = await response.json();
+          for(let orderHistory of responseBody){
+            orderHistory.createdAt = useTimeAgo(orderHistory.createdAt);
+            orderHistory.order.createdAt = useTimeAgo(orderHistory.order.createdAt);
+          }
+          commit('setMyOrderHistory', responseBody);
+        }
       } catch (error) {
         console.error(error);
       }
