@@ -1,6 +1,7 @@
 <template>
   <div class="">
     <h1>Historial de Pedidos</h1>
+    <MyOrderHistoryFilter/>
     <p style="text-align:left; font-weight: bold">Resultados</p>
 
     <div class="orders">
@@ -36,9 +37,13 @@
 </template>
 
 <script>
+import MyOrderHistoryFilter from '@/components/MyOrderHistoryFilter.vue';
 import { mapState, mapActions } from 'vuex';
 
 export default {
+  components: {
+    MyOrderHistoryFilter
+  },
   computed: {
     ...mapState(["myOrderHistory"]),
   },
