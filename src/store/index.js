@@ -17,14 +17,24 @@ export default new Vuex.Store({
     setToken(state, payload) {
       state.token = payload;
     },
-    setOrders(state, orders){
-      state.orders = orders;
+    setOrders(state, pageableOrders){
+      for(let order of pageableOrders.content){
+        order.createdAt = useTimeAgo(order.createdAt);
+      }
+      state.orders = pageableOrders.content;
     },
-    setMyOrders(state, myOrders){
-      state.myOrders = myOrders;
+    setMyOrders(state, pageableMyOrders){
+      for(let order of pageableMyOrders.content){
+        order.createdAt = useTimeAgo(order.createdAt);
+      }
+      state.myOrders = pageableMyOrders.content;
     },
-    setMyOrderHistory(state, myOrderHistory){
-      state.myOrderHistory = myOrderHistory;
+    setMyOrderHistory(state, pageableMyOrderHistory){
+      for(let orderHistory of pageableMyOrderHistory.content){
+        orderHistory.createdAt = useTimeAgo(orderHistory.createdAt);
+        orderHistory.order.createdAt = useTimeAgo(orderHistory.order.createdAt);
+      }
+      state.myOrderHistory = pageableMyOrderHistory.content;
     },
   },
   actions: {
@@ -71,9 +81,6 @@ export default new Vuex.Store({
 
         if(response.status == 200){
           const responseBody = await response.json();
-          for(let order of responseBody){
-            order.createdAt = useTimeAgo(order.createdAt);
-          }
           commit('setOrders', responseBody);
         }
       } catch (error) {
@@ -91,9 +98,6 @@ export default new Vuex.Store({
 
         if(response.status == 200){
           const responseBody = await response.json();
-          for(let order of responseBody){
-            order.createdAt = useTimeAgo(order.createdAt);
-          }
           commit('setMyOrders', responseBody);
         }
       } catch (error) {
@@ -111,10 +115,6 @@ export default new Vuex.Store({
 
         if(response.status == 200){
           const responseBody = await response.json();
-          for(let orderHistory of responseBody){
-            orderHistory.createdAt = useTimeAgo(orderHistory.createdAt);
-            orderHistory.order.createdAt = useTimeAgo(orderHistory.order.createdAt);
-          }
           commit('setMyOrderHistory', responseBody);
         }
       } catch (error) {

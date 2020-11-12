@@ -68,8 +68,6 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 
-import useTimeAgo from '../hooks/useTimeAgo'
-
 export default {
   data() {
     return {
@@ -130,10 +128,6 @@ export default {
           );
 
           const responseBody = await response.json();
-          for(let orderHistory of responseBody){
-            orderHistory.createdAt = useTimeAgo(orderHistory.createdAt);
-            orderHistory.order.createdAt = useTimeAgo(orderHistory.order.createdAt);
-          }
           this.setMyOrderHistory(responseBody)
         } catch (error) {
           console.error(error);
@@ -173,10 +167,6 @@ export default {
         console.log("response", response);
         if (response.status == 200) {
           const responseBody = await response.json();
-          for(let orderHistory of responseBody){
-            orderHistory.createdAt = useTimeAgo(orderHistory.createdAt);
-            orderHistory.order.createdAt = useTimeAgo(orderHistory.order.createdAt);
-          }
           console.log("responseBody", responseBody);
           this.setMyOrderHistory(responseBody)
         }

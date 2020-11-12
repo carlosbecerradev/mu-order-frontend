@@ -2,7 +2,7 @@
   <div class="filter">
     <p style="font-weight: bold; margin-top: 0;">Filtrar</p>
     <div class="filter-items">
-      <div class="autocomplete-itemname">        
+      <div class="autocomplete-itemname">
         <div>
           <label  style="display: block; width:100%; text-align: left;" for="">Por item</label>
           <div class="autocomplete-itemname-input-block">
@@ -45,7 +45,7 @@
       <!-- combobox -->
       <div class="select-itemcategorie">
         <label  style="display: block; width:100%; text-align: left;" for="">Por categoría</label>
-        <select 
+        <select
           v-model="filterByItemCategorie.itemCategorieSelected"
           @change="getOrdersByItemCategorie()"
           >
@@ -68,8 +68,6 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 
-import useTimeAgo from '../hooks/useTimeAgo'
-
 export default {
   data() {
     return {
@@ -81,7 +79,7 @@ export default {
       filterByItemCategorie: {
         itemCategories: [],
         itemCategorieSelected: '',
-      },      
+      },
     };
   },
   computed: {
@@ -130,9 +128,6 @@ export default {
           );
 
           const responseBody = await response.json();
-          for(let order of responseBody){            
-            order.createdAt = useTimeAgo(order.createdAt); 
-          }
           this.setMyOrders(responseBody)
         } catch (error) {
           console.error(error);
@@ -172,9 +167,6 @@ export default {
         console.log("response", response);
         if (response.status == 200) {
           const responseBody = await response.json();
-          for(let order of responseBody){            
-            order.createdAt = useTimeAgo(order.createdAt); 
-          }
           console.log("responseBody", responseBody);
           this.setMyOrders(responseBody)
         }
