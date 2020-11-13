@@ -27,11 +27,13 @@
         </div>
       </div>
     </div>
+    <Pagination/>
   </div>
 </template>
 
 <script>
-import OrdersFilter from '@/components/OrdersFilter.vue'
+import OrdersFilter from '@/components/OrdersFilter.vue';
+import Pagination from '@/components/Pagination.vue';
 import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
@@ -47,7 +49,7 @@ export default {
     ...mapActions(['getOrders']),
   },
   components: {
-    OrdersFilter
+    OrdersFilter, Pagination
   },
   created() {
     this.getOrders();

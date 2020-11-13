@@ -12,6 +12,17 @@ export default new Vuex.Store({
     orders: [],
     myOrders: [],
     myOrderHistory: [],
+    pagination: {
+      url: null,
+      elementsPerPage: 0,
+      currentPage: 0,
+      totalPages: 0,
+      currentElements: 0,
+      totalElements: 0,
+      first: false,
+      last: false,
+      empty: false,
+    },
   },
   mutations: {
     setToken(state, payload) {
@@ -35,6 +46,9 @@ export default new Vuex.Store({
         orderHistory.order.createdAt = useTimeAgo(orderHistory.order.createdAt);
       }
       state.myOrderHistory = pageableMyOrderHistory.content;
+    },
+    setPagination(state, payload) {
+      state.pagination = payload;
     },
   },
   actions: {
@@ -71,8 +85,9 @@ export default new Vuex.Store({
       router.push('/')
     },
     async getOrders({commit, state}) {
+      const url = 'http://localhost:8090/api/order';
       try {
-        const response = await fetch("http://localhost:8090/api/order", {
+        const response = await fetch(url, {
           method: "GET",
           headers: {
             'Authorization': "Bearer " + state.token,
@@ -82,6 +97,7 @@ export default new Vuex.Store({
         if(response.status == 200){
           const responseBody = await response.json();
           commit('setOrders', responseBody);
+          this.dispatch('setPagination', {url, responseBody});
         }
       } catch (error) {
         console.error(error);
@@ -106,7 +122,8 @@ export default new Vuex.Store({
     },
     async getMyOrderHistory({commit, state}) {
       try {
-        const response = await fetch("http://localhost:8090/api/order-history", {
+        let url = "http://localhost:8090/api/order-history";
+        const response = await fetch(url, {
           method: "GET",
           headers: {
             'Authorization': "Bearer " + state.token,
@@ -116,10 +133,25 @@ export default new Vuex.Store({
         if(response.status == 200){
           const responseBody = await response.json();
           commit('setMyOrderHistory', responseBody);
+          this.dispatch('setPagination', url, responseBody);
         }
       } catch (error) {
         console.error(error);
       }
+    },
+    setPagination({commit}, {url, responseBody}) {
+      let pagination = {
+        url: url,
+        elementsPerPage: responseBody.size,
+        currentPage: responseBody.number,
+        totalPages: responseBody.totalPages,
+        currentElements: responseBody.numberOfElements,
+        totalElements: responseBody.totalElements,
+        first: responseBody.first,
+        last: responseBody.last,
+        empty: responseBody.empty,
+      };
+      commit('setPagination', pagination);
     },
   },
   modules: {

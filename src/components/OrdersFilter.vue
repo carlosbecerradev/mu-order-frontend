@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setOrders']),
-    ...mapActions(['getOrders']),
+    ...mapActions(['getOrders', 'setPagination']),
     async getItemsByName(itemNameParameter) {
       if (this.filterByItem.itemNameParameter.trim() !== "") {
         try {
@@ -116,10 +116,9 @@ export default {
     },
     async getOrdersByItemName(itemNameParameter) {
       if (this.filterByItem.itemNameParameter.trim() !== "") {
+        const url = `http://localhost:8090/api/order/by-item/${itemNameParameter}`;
         try {
-          const response = await fetch(
-            `http://localhost:8090/api/order/by-item/${itemNameParameter}`,
-            {
+          const response = await fetch(url, {
               method: "GET",
               headers: {
                 Authorization: "Bearer " + this.token,
@@ -128,7 +127,8 @@ export default {
           );
 
           const responseBody = await response.json();
-          this.setOrders(responseBody)
+          this.setOrders(responseBody);
+          this.setPagination({url, responseBody});
         } catch (error) {
           console.error(error);
         }
@@ -155,9 +155,8 @@ export default {
     },
     async getOrdersByItemCategorie() {
       try {
-        const response = await fetch(
-          `http://localhost:8090/api/order/by-item-category/${this.filterByItemCategorie.itemCategorieSelected}`,
-          {
+        const url = `http://localhost:8090/api/order/by-item-category/${this.filterByItemCategorie.itemCategorieSelected}`;
+        const response = await fetch(url, {
             method: "GET",
             headers: {
               Authorization: "Bearer " + this.token,
@@ -168,7 +167,8 @@ export default {
         if (response.status == 200) {
           const responseBody = await response.json();
           console.log("responseBody", responseBody);
-          this.setOrders(responseBody)
+          this.setOrders(responseBody);
+          this.setPagination({url, responseBody});
         }
       } catch (error) {
         console.error(error);
