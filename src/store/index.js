@@ -7,6 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: null,
+    baseUrl: "http://localhost:8090/api/",
+    data: [],
     orders: [],
     myOrders: [],
     myOrderHistory: [],
@@ -26,14 +28,17 @@ export default new Vuex.Store({
     setToken(state, payload) {
       state.token = payload;
     },
-    setOrders(state, pageableOrders){
-      state.orders = pageableOrders.content;
+    setData(state, payload){
+      state.data = payload;
     },
-    setMyOrders(state, pageableMyOrders){
-      state.myOrders = pageableMyOrders.content;
+    setOrders(state, payload){
+      state.orders = payload;
     },
-    setMyOrderHistory(state, pageableMyOrderHistory){
-      state.myOrderHistory = pageableMyOrderHistory.content;
+    setMyOrders(state, payload){
+      state.myOrders = payload;
+    },
+    setMyOrderHistory(state, payload){
+      state.myOrderHistory = payload;
     },
     setPagination(state, payload) {
       state.pagination = payload;
@@ -72,60 +77,41 @@ export default new Vuex.Store({
       commit('setToken', null)
       router.push('/')
     },
-    async getOrders({commit, state}) {
-      const url = 'http://localhost:8090/api/order';
+    async fetchData({commit, state}, resourcePath){
       try {
+        const url = `${state.baseUrl}${resourcePath}`;
+        console.log(url)
         const response = await fetch(url, {
           method: "GET",
           headers: {
             'Authorization': "Bearer " + state.token,
           },
         });
+        console.log(response)
 
         if(response.status == 200){
           const responseBody = await response.json();
-          commit('setOrders', responseBody);
-          this.dispatch('setPagination', {url, responseBody});
+          commit('setData', responseBody);
+          console.log(responseBody)
         }
       } catch (error) {
         console.error(error);
       }
+    },
+    async getOrders({commit, state}) {
+      let resourcePath = "order";
+      await this.dispatch('fetchData', resourcePath);
+      commit('setOrders', state.data.content);
     },
     async getMyOrders({commit, state}) {
-      try {
-        const response = await fetch("http://localhost:8090/api/my-order", {
-          method: "GET",
-          headers: {
-            'Authorization': "Bearer " + state.token,
-          },
-        });
-
-        if(response.status == 200){
-          const responseBody = await response.json();
-          commit('setMyOrders', responseBody);
-        }
-      } catch (error) {
-        console.error(error);
-      }
+      let resourcePath = "my-order";
+      await this.dispatch('fetchData', resourcePath);
+      commit('setMyOrders', state.data.content);
     },
     async getMyOrderHistory({commit, state}) {
-      try {
-        let url = "http://localhost:8090/api/order-history";
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            'Authorization': "Bearer " + state.token,
-          },
-        });
-
-        if(response.status == 200){
-          const responseBody = await response.json();
-          commit('setMyOrderHistory', responseBody);
-          this.dispatch('setPagination', url, responseBody);
-        }
-      } catch (error) {
-        console.error(error);
-      }
+      let resourcePath = "order-history";
+      await this.dispatch('fetchData', resourcePath);
+      commit('setMyOrderHistory', state.data.content);
     },
     setPagination({commit}, {url, responseBody}) {
       let pagination = {
