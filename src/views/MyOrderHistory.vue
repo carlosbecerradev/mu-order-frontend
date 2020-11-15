@@ -43,14 +43,14 @@ import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
   components: {
-    MyOrderHistoryFilter
+    MyOrderHistoryFilter,
   },
   computed: {
     ...mapState(["myOrderHistory"]),
   },
   methods: {
     ...mapActions(["getMyOrderHistory"]),
-    useTimeAgo
+    useTimeAgo,
   },
   created() {
     this.getMyOrderHistory();

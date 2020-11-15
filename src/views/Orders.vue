@@ -34,24 +34,19 @@
 <script>
 import OrdersFilter from '@/components/OrdersFilter.vue';
 import Pagination from '@/components/Pagination.vue';
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
-  data() {
-    return {
-    }
-  },
   computed: {
-    ...mapState(["token", "orders"]),
+    ...mapState(["orders"]),
   },
   methods: {
-    ...mapMutations(['setOrders']),
     ...mapActions(['getOrders']),
-    useTimeAgo
+    useTimeAgo,
   },
   components: {
-    OrdersFilter, Pagination
+    OrdersFilter, Pagination,
   },
   created() {
     this.getOrders();

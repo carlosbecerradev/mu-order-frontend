@@ -44,10 +44,6 @@ import { mapState, mapActions } from "vuex";
 import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
-  data() {
-    return {
-    }
-  },
   computed: {
     ...mapState(["myOrders", "token"]),
   },
@@ -64,7 +60,7 @@ export default {
           });
           if(response.status == 200){
             console.log("Order was deleted");
-    this.getMyOrders();
+            this.getMyOrders();
           }
         } catch (error) {
          console.log(error);
@@ -74,7 +70,7 @@ export default {
     useTimeAgo,
   },
   components: {
-    MyOrdersFilter
+    MyOrdersFilter,
   },
   created() {
     this.getMyOrders();
