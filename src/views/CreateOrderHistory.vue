@@ -30,7 +30,7 @@
           </div>
           <div class="order-footer">
             <div class="user">By {{ order.nickname }}</div>
-            <div class="timeago">{{ order.createdAt }}</div>
+            <div class="timeago">{{ useTimeAgo(order.createdAt) }}</div>
           </div>
         </div>
         <div v-else class="">Loading</div>
@@ -72,7 +72,7 @@
 
 <script>
 import { mapState } from "vuex";
-import useTimeAgo from '../hooks/useTimeAgo'
+import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
   data() {
@@ -101,7 +101,6 @@ export default {
         });
         if(response.status == 200){
           const responseBody = await response.json();
-          responseBody.createdAt = useTimeAgo(responseBody.createdAt);
           this.order = responseBody;
         }
       } catch (error) {
@@ -143,6 +142,7 @@ export default {
         console.error(error);
       }
     },
+    useTimeAgo,
   },
   created() {
     const idParameter = this.$route.params.id;

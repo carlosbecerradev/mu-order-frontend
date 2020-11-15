@@ -21,7 +21,7 @@
           <div class="">Negociado con: {{ orderHistoryItem.mate.nickname }}</div>
           <div class="">Precio: {{ orderHistoryItem.price }}</div>
           <div class="">Observación: {{ orderHistoryItem.observation }}</div>
-          <div class="">Conseguido {{ orderHistoryItem.createdAt }}</div>
+          <div class="">Conseguido {{ useTimeAgo(orderHistoryItem.createdAt) }}</div>
         </div>
         <div class="order-body">
           <div class="">Observación del pedido:</div>
@@ -29,7 +29,7 @@
         </div>
         <div class="order-footer">
           <div class="user">By {{orderHistoryItem.order.nickname}}</div>
-          <div class="timeago">{{orderHistoryItem.order.createdAt}}</div>
+          <div class="timeago">{{useTimeAgo(orderHistoryItem.order.createdAt)}}</div>
         </div>
       </div>
     </div>
@@ -39,6 +39,7 @@
 <script>
 import MyOrderHistoryFilter from '@/components/MyOrderHistoryFilter.vue';
 import { mapState, mapActions } from 'vuex';
+import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
   components: {
@@ -49,6 +50,7 @@ export default {
   },
   methods: {
     ...mapActions(["getMyOrderHistory"]),
+    useTimeAgo
   },
   created() {
     this.getMyOrderHistory();

@@ -26,7 +26,7 @@
         </div>
         <div class="order-footer">
           <div class="user">By {{order.nickname}}</div>
-          <div class="timeago">{{order.createdAt}}</div>
+          <div class="timeago">{{useTimeAgo(order.createdAt)}}</div>
         </div>
         <div class="order-actions">
           <router-link :to="{path: `/create/order-history/${order.id}`}">Conseguido</router-link> |
@@ -39,8 +39,9 @@
 </template>
 
 <script>
-import MyOrdersFilter from '@/components/MyOrdersFilter.vue'
+import MyOrdersFilter from '@/components/MyOrdersFilter.vue';
 import { mapState, mapActions } from "vuex";
+import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
   data() {
@@ -69,7 +70,8 @@ export default {
          console.log(error);
         }
       }
-    }
+    },
+    useTimeAgo,
   },
   components: {
     MyOrdersFilter

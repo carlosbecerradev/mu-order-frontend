@@ -23,7 +23,7 @@
         </div>
         <div class="order-footer">
           <div class="user">By {{order.nickname}}</div>
-          <div class="timeago">{{order.createdAt}}</div>
+          <div class="timeago">{{useTimeAgo(order.createdAt)}}</div>
         </div>
       </div>
     </div>
@@ -35,6 +35,7 @@
 import OrdersFilter from '@/components/OrdersFilter.vue';
 import Pagination from '@/components/Pagination.vue';
 import { mapState, mapMutations, mapActions } from "vuex";
+import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
   data() {
@@ -47,6 +48,7 @@ export default {
   methods: {
     ...mapMutations(['setOrders']),
     ...mapActions(['getOrders']),
+    useTimeAgo
   },
   components: {
     OrdersFilter, Pagination

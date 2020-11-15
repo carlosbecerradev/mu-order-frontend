@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router/index.js'
 
-import useTimeAgo from '../hooks/useTimeAgo'
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -29,22 +27,12 @@ export default new Vuex.Store({
       state.token = payload;
     },
     setOrders(state, pageableOrders){
-      for(let order of pageableOrders.content){
-        order.createdAt = useTimeAgo(order.createdAt);
-      }
       state.orders = pageableOrders.content;
     },
     setMyOrders(state, pageableMyOrders){
-      for(let order of pageableMyOrders.content){
-        order.createdAt = useTimeAgo(order.createdAt);
-      }
       state.myOrders = pageableMyOrders.content;
     },
     setMyOrderHistory(state, pageableMyOrderHistory){
-      for(let orderHistory of pageableMyOrderHistory.content){
-        orderHistory.createdAt = useTimeAgo(orderHistory.createdAt);
-        orderHistory.order.createdAt = useTimeAgo(orderHistory.order.createdAt);
-      }
       state.myOrderHistory = pageableMyOrderHistory.content;
     },
     setPagination(state, payload) {
