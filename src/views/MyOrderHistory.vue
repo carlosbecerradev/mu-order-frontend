@@ -33,22 +33,25 @@
         </div>
       </div>
     </div>
+    <Paginator :setData="setMyOrderHistory" />
   </div>
 </template>
 
 <script>
 import MyOrderHistoryFilter from '@/components/MyOrderHistoryFilter.vue';
-import { mapState, mapActions } from 'vuex';
+import Paginator from '@/components/Paginator.vue';
+import { mapState, mapActions, mapMutations } from 'vuex';
 import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
   components: {
-    MyOrderHistoryFilter,
+    MyOrderHistoryFilter, Paginator,
   },
   computed: {
     ...mapState(["myOrderHistory"]),
   },
   methods: {
+    ...mapMutations(['setMyOrderHistory']),
     ...mapActions(["getMyOrderHistory"]),
     useTimeAgo,
   },

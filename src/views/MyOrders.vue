@@ -35,12 +35,14 @@
         </div>
       </div>
     </div>
+    <Paginator :setData="setMyOrders" />
   </div>
 </template>
 
 <script>
 import MyOrdersFilter from '@/components/MyOrdersFilter.vue';
-import { mapState, mapActions } from "vuex";
+import Paginator from '@/components/Paginator.vue';
+import { mapState, mapActions, mapMutations } from "vuex";
 import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
@@ -48,6 +50,7 @@ export default {
     ...mapState(["myOrders", "token"]),
   },
   methods: {
+    ...mapMutations(['setMyOrders']),
     ...mapActions(['getMyOrders']),
     async deleteOrder(order){
       if(confirm(`${order.nickname}, ¿Estás seguro de eliminar este pedido?`)){
@@ -70,7 +73,7 @@ export default {
     useTimeAgo,
   },
   components: {
-    MyOrdersFilter,
+    MyOrdersFilter, Paginator,
   },
   created() {
     this.getMyOrders();
