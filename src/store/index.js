@@ -92,6 +92,7 @@ export default new Vuex.Store({
       let resourcePath = "order";
       await this.dispatch('fetchData', resourcePath);
       commit('setOrders', state.data.content);
+      this.dispatch('createPagination', {url: `${state.baseUrl}${resourcePath}`, data: state.data});
     },
     async getMyOrders({commit, state}) {
       let resourcePath = "my-order";

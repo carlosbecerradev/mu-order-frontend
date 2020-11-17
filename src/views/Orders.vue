@@ -27,26 +27,27 @@
         </div>
       </div>
     </div>
-    <Pagination/>
+    <Paginator :setData="setOrders"/>
   </div>
 </template>
 
 <script>
 import OrdersFilter from '@/components/OrdersFilter.vue';
-import Pagination from '@/components/Pagination.vue';
-import { mapState, mapActions } from "vuex";
+import Paginator from '@/components/Paginator.vue';
+import { mapState, mapActions, mapMutations } from "vuex";
 import useTimeAgo from '../helpers/useTimeAgo';
 
 export default {
   computed: {
-    ...mapState(["orders"]),
+    ...mapState(['orders']),
   },
   methods: {
+    ...mapMutations(['setOrders']),
     ...mapActions(['getOrders']),
     useTimeAgo,
   },
   components: {
-    OrdersFilter, Pagination,
+    OrdersFilter, Paginator,
   },
   created() {
     this.getOrders();
