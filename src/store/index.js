@@ -12,17 +12,7 @@ export default new Vuex.Store({
     orders: [],
     myOrders: [],
     myOrderHistory: [],
-    pagination: {
-      url: null,
-      elementsPerPage: 0,
-      currentPage: 0,
-      totalPages: 0,
-      currentElements: 0,
-      totalElements: 0,
-      first: false,
-      last: false,
-      empty: false,
-    },
+    pagination: null,
   },
   mutations: {
     setToken(state, payload) {
@@ -113,20 +103,20 @@ export default new Vuex.Store({
       await this.dispatch('fetchData', resourcePath);
       commit('setMyOrderHistory', state.data.content);
     },
-    setPagination({commit}, {url, responseBody}) {
+    createPagination({commit}, {url, data}){
       let pagination = {
         url: url,
-        elementsPerPage: responseBody.size,
-        currentPage: responseBody.number,
-        totalPages: responseBody.totalPages,
-        currentElements: responseBody.numberOfElements,
-        totalElements: responseBody.totalElements,
-        first: responseBody.first,
-        last: responseBody.last,
-        empty: responseBody.empty,
+        elementsPerPage: data.size,
+        currentPage: data.number,
+        totalPages: data.totalPages,
+        currentPageElements: data.numberOfElements,
+        totalElements: data.totalElements,
+        first: data.first,
+        last: data.last,
+        empty: data.empty,
       };
       commit('setPagination', pagination);
-    },
+    }
   },
   modules: {
   }
