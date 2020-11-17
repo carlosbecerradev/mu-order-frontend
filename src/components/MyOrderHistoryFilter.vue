@@ -83,11 +83,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(["token", "myOrderHistory"]),
+    ...mapState(['token', 'myOrderHistory', 'baseUrl', 'data']),
   },
   methods: {
     ...mapMutations(['setMyOrderHistory']),
-    ...mapActions(['getMyOrderHistory']),
+    ...mapActions(['getMyOrderHistory', 'createPagination', 'fetchData']),
     async getItemsByName(itemNameParameter) {
       if (this.filterByItem.itemNameParameter.trim() !== "") {
         try {
@@ -116,22 +116,10 @@ export default {
     },
     async getMyOrderHistoryByItemName(itemNameParameter) {
       if (this.filterByItem.itemNameParameter.trim() !== "") {
-        try {
-          const response = await fetch(
-            `http://localhost:8090/api/order-history/by-item/${itemNameParameter}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: "Bearer " + this.token,
-              },
-            }
-          );
-
-          const responseBody = await response.json();
-          this.setMyOrderHistory(responseBody)
-        } catch (error) {
-          console.error(error);
-        }
+        const resourcePath = `order-history/by-item/${itemNameParameter}`;
+        await this.fetchData(resourcePath);
+        this.setMyOrderHistory(this.data.content);
+        this.createPagination({url: `${this.baseUrl}${resourcePath}`, data: this.data});
       }
     },
     async getItemCategories() {
@@ -154,25 +142,10 @@ export default {
       }
     },
     async getMyOrderHistoryByItemCategorie() {
-      try {
-        const response = await fetch(
-          `http://localhost:8090/api/order-history/by-item-category/${this.filterByItemCategorie.itemCategorieSelected}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: "Bearer " + this.token,
-            },
-          }
-        );
-        console.log("response", response);
-        if (response.status == 200) {
-          const responseBody = await response.json();
-          console.log("responseBody", responseBody);
-          this.setMyOrderHistory(responseBody)
-        }
-      } catch (error) {
-        console.error(error);
-      }
+      const resourcePath = `order-history/by-item-category/${this.filterByItemCategorie.itemCategorieSelected}`;
+      await this.fetchData(resourcePath);
+      this.setMyOrderHistory(this.data.content);
+      this.createPagination({url: `${this.baseUrl}${resourcePath}`, data: this.data});
     },
     cleanFilters() {
       this.filterByItem.itemNameParameter = "";

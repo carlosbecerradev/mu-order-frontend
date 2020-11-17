@@ -83,11 +83,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(["token", "orders"]),
+    ...mapState(['token', 'orders', 'baseUrl', 'data']),
   },
   methods: {
     ...mapMutations(['setOrders']),
-    ...mapActions(['getOrders', 'setPagination']),
+    ...mapActions(['getOrders', 'createPagination', 'fetchData']),
     async getItemsByName(itemNameParameter) {
       if (this.filterByItem.itemNameParameter.trim() !== "") {
         try {
@@ -116,22 +116,10 @@ export default {
     },
     async getOrdersByItemName(itemNameParameter) {
       if (this.filterByItem.itemNameParameter.trim() !== "") {
-        const url = `http://localhost:8090/api/order/by-item/${itemNameParameter}`;
-        try {
-          const response = await fetch(url, {
-              method: "GET",
-              headers: {
-                Authorization: "Bearer " + this.token,
-              },
-            }
-          );
-
-          const responseBody = await response.json();
-          this.setOrders(responseBody);
-          this.setPagination({url, responseBody});
-        } catch (error) {
-          console.error(error);
-        }
+        const resourcePath = `order/by-item/${itemNameParameter}`;
+        await this.fetchData(resourcePath);
+        this.setOrders(this.data.content);
+        this.createPagination({url: `${this.baseUrl}${resourcePath}`, data: this.data});
       }
     },
     async getItemCategories() {
@@ -154,25 +142,10 @@ export default {
       }
     },
     async getOrdersByItemCategorie() {
-      try {
-        const url = `http://localhost:8090/api/order/by-item-category/${this.filterByItemCategorie.itemCategorieSelected}`;
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-              Authorization: "Bearer " + this.token,
-            },
-          }
-        );
-        console.log("response", response);
-        if (response.status == 200) {
-          const responseBody = await response.json();
-          console.log("responseBody", responseBody);
-          this.setOrders(responseBody);
-          this.setPagination({url, responseBody});
-        }
-      } catch (error) {
-        console.error(error);
-      }
+        const resourcePath = `order/by-item-category/${this.filterByItemCategorie.itemCategorieSelected}`;
+        await this.fetchData(resourcePath);
+        this.setOrders(this.data.content);
+        this.createPagination({url: `${this.baseUrl}${resourcePath}`, data: this.data});
     },
     cleanFilters() {
       this.filterByItem.itemNameParameter = "";
